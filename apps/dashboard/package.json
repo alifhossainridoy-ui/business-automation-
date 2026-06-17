@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@rupzone/db": "workspace:*",
+    "@rupzone/meta-client": "workspace:*",
     "@rupzone/shared-types": "workspace:*",
     "next": "14.2.15",
     "react": "^18.3.1",

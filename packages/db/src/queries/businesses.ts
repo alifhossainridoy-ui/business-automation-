@@ -22,6 +22,18 @@ export async function getBusiness(businessId: string): Promise<Business | null> 
   return data as Business | null;
 }
 
+/** Routes an incoming webhook event (keyed by Page ID) to its business. */
+export async function getBusinessByFbPageId(fbPageId: string): Promise<Business | null> {
+  const { data, error } = await getSupabaseClient()
+    .from("businesses")
+    .select("*")
+    .eq("fb_page_id", fbPageId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data as Business | null;
+}
+
 export type CreateBusinessInput = Partial<
   Omit<Business, "id" | "created_at">
 > & { name: string };

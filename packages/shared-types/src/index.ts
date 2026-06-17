@@ -51,6 +51,8 @@ export interface Lead {
 }
 
 export type CommentCategory = "abuse" | "negative" | "spam" | "price" | "normal";
+/** "blocklist" is a local-rule category, never an AI classifier output. */
+export type CommentLogCategory = CommentCategory | "blocklist";
 export type CommentAction = "deleted" | "hidden" | "replied" | "none";
 
 export interface CommentLogEntry {
@@ -59,7 +61,7 @@ export interface CommentLogEntry {
   comment_id: string | null;
   author: string | null;
   text: string | null;
-  category: CommentCategory | null;
+  category: CommentLogCategory | null;
   action: CommentAction | null;
   created_at: string;
 }
