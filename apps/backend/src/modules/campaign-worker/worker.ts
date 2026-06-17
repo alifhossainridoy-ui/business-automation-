@@ -16,12 +16,14 @@ export function startCampaignWorker(): Worker<CampaignJobData> {
     async (job: Job<CampaignJobData>) => {
       const { business_id, campaign_id, phone, template } = job.data;
 
-      const business = await getBusiness(business_id);
-      if (!business?.wa_token || !business.wa_phone_id) {
-        throw new Error(`Business ${business_id} has no WhatsApp credentials configured`);
-      }
-
+      // Credential lookup lives inside the try too — a missing token must
+      // still count as a failed send, or the campaign's sent+failed total
+      // never reaches `total` and its status stays "running" forever.
       try {
+        const business = await getBusiness(business_id);
+        if (!business?.wa_token || !business.wa_phone_id) {
+          throw new Error(`Business ${business_id} has no WhatsApp credentials configured`);
+        }
         await sendWhatsAppTemplate(phone, template, "bn", business.wa_token, business.wa_phone_id);
         await incrementCampaignSent(campaign_id);
       } catch (err) {
