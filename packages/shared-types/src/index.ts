@@ -43,11 +43,27 @@ export interface Lead {
   id: string;
   business_id: string;
   customer_id: string | null;
+  campaign_id: string | null;
   status: LeadStatus;
   product: string | null;
   amount: number | null;
   note: string | null;
   updated_at: string;
+}
+
+export type CampaignStatus = "draft" | "running" | "done";
+
+export interface Campaign {
+  id: string;
+  business_id: string;
+  name: string | null;
+  template: string | null;
+  total: number | null;
+  sent: number;
+  replied: number;
+  failed: number;
+  status: CampaignStatus;
+  created_at: string;
 }
 
 export type CommentCategory = "abuse" | "negative" | "spam" | "price" | "normal";

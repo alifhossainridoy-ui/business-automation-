@@ -1,4 +1,4 @@
-import type { Business, ConversationChannel } from "@rupzone/shared-types";
+import type { Business, ConversationChannel, Customer } from "@rupzone/shared-types";
 import { findOrCreateCustomer, insertConversation, listRecentConversations } from "@rupzone/db";
 import { sendMessengerMessage } from "@rupzone/meta-client";
 import { sendWhatsAppMessage } from "@rupzone/whatsapp-client";
@@ -25,10 +25,10 @@ export interface InboundMessage {
 export async function handleInboundMessage(
   business: Business,
   inbound: InboundMessage
-): Promise<void> {
+): Promise<Customer | undefined> {
   if (!business.openrouter_api_key) {
     console.error(`Business ${business.id} has no openrouter_api_key; skipping message`);
-    return;
+    return undefined;
   }
 
   // WhatsApp's `wa_id` is a phone number, so it doubles as the cross-channel
@@ -73,6 +73,8 @@ export async function handleInboundMessage(
     role: "agent",
     message: result.text,
   });
+
+  return customer;
 }
 
 async function sendReply(

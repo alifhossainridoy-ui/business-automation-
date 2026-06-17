@@ -11,8 +11,10 @@
     "@rupzone/ai-client": "workspace:*",
     "@rupzone/db": "workspace:*",
     "@rupzone/meta-client": "workspace:*",
+    "@rupzone/queue": "workspace:*",
     "@rupzone/whatsapp-client": "workspace:*",
     "@rupzone/shared-types": "workspace:*",
+    "bullmq": "^5.34.0",
     "fastify": "^4.28.1"
   },
   "devDependencies": {

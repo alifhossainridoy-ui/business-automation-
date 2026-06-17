@@ -4,6 +4,7 @@ const nextConfig = {
     "@rupzone/ai-client",
     "@rupzone/db",
     "@rupzone/meta-client",
+    "@rupzone/queue",
     "@rupzone/shared-types",
   ],
 };

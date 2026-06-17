@@ -5,6 +5,7 @@ import { getBusinessByFbPageId, getBusinessByWaPhoneId } from "@rupzone/db";
 import { env } from "../../config/env";
 import { processComment } from "../../modules/comment-engine";
 import { handleInboundMessage } from "../../modules/agent";
+import { onCustomerReply } from "../../modules/leads";
 
 interface VerifyQuery {
   "hub.mode"?: string;
@@ -126,14 +127,21 @@ async function routeWhatsAppPayload(payload: WhatsAppWebhookPayload): Promise<vo
         if (!message.text?.body) continue;
         const name = change.value.contacts?.find((c) => c.wa_id === message.from)?.profile?.name;
 
-        await handleInboundMessage(business, {
+        const customer = await handleInboundMessage(business, {
           channel: "whatsapp",
           text: message.text.body,
           wa_id: message.from,
           name,
         }).catch((err) => {
           console.error("Failed to process WhatsApp message:", err);
+          return undefined;
         });
+
+        if (customer) {
+          await onCustomerReply(business, customer.id).catch((err) => {
+            console.error("Failed to process lead reply tracking:", err);
+          });
+        }
       }
     }
   }
