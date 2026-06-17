@@ -2,3 +2,7 @@ export { getSupabaseClient } from "./client";
 export * from "./queries/businesses";
 export * from "./queries/blocklist";
 export * from "./queries/commentLog";
+export * from "./queries/customers";
+export * from "./queries/conversations";
+export * from "./queries/productKb";
+export * from "./queries/corrections";

@@ -65,3 +65,21 @@ export interface CommentLogEntry {
   action: CommentAction | null;
   created_at: string;
 }
+
+export interface ProductKbEntry {
+  id: string;
+  business_id: string;
+  content: string;
+  /** Cosine distance to the query embedding — only present on search results. */
+  distance?: number;
+}
+
+export interface Correction {
+  id: string;
+  business_id: string;
+  question: string;
+  wrong_answer: string;
+  right_answer: string;
+  applied: boolean;
+  created_at: string;
+}

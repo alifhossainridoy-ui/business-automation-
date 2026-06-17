@@ -10,6 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@rupzone/ai-client": "workspace:*",
     "@rupzone/db": "workspace:*",
     "@rupzone/meta-client": "workspace:*",
     "@rupzone/shared-types": "workspace:*",

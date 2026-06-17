@@ -64,3 +64,15 @@ export async function sendPrivateReply(
 ): Promise<void> {
   await graphPost(`${commentId}/private_replies`, pageToken, { message });
 }
+
+/** Sends a standalone Messenger message (Send API) to a PSID. */
+export async function sendMessengerMessage(
+  psid: string,
+  message: string,
+  pageToken: string
+): Promise<void> {
+  await graphPost("me/messages", pageToken, {
+    recipient: { id: psid },
+    message: { text: message },
+  });
+}

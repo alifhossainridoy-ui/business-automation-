@@ -22,3 +22,23 @@ export interface AiProvider {
   name: string;
   complete(options: AiCompleteOptions): Promise<string>;
 }
+
+export interface AiEmbedOptions {
+  /** OpenRouter API key for the calling business — never hardcoded. */
+  apiKey: string;
+  input: string;
+  /** Primary embedding model to try first. */
+  primaryModel?: string;
+}
+
+export interface AiEmbedResult {
+  embedding: number[];
+  modelUsed: string;
+  /** True if the primary embedding provider failed and fallback was used. */
+  fellBack: boolean;
+}
+
+export interface AiEmbedProvider {
+  name: string;
+  embed(options: AiEmbedOptions): Promise<number[]>;
+}

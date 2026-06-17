@@ -11,6 +11,7 @@
     "@rupzone/ai-client": "workspace:*",
     "@rupzone/db": "workspace:*",
     "@rupzone/meta-client": "workspace:*",
+    "@rupzone/whatsapp-client": "workspace:*",
     "@rupzone/shared-types": "workspace:*",
     "fastify": "^4.28.1"
   },

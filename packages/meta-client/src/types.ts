@@ -8,7 +8,10 @@ export interface MetaWebhookEntry {
   /** The Facebook Page ID this entry belongs to. */
   id: string;
   time?: number;
-  changes: MetaWebhookChange[];
+  /** Present for "feed" (comment) events. */
+  changes?: MetaWebhookChange[];
+  /** Present for Messenger events — a different shape from `changes`. */
+  messaging?: MetaMessagingEvent[];
 }
 
 export interface MetaWebhookChange {
@@ -27,4 +30,15 @@ export interface MetaCommentChangeValue {
   sender_name?: string;
   message?: string;
   created_time?: number;
+}
+
+/** One inbound Messenger message, as delivered in entry.messaging[]. */
+export interface MetaMessagingEvent {
+  sender: { id: string };
+  recipient: { id: string };
+  timestamp?: number;
+  message?: {
+    mid: string;
+    text?: string;
+  };
 }

@@ -34,6 +34,18 @@ export async function getBusinessByFbPageId(fbPageId: string): Promise<Business 
   return data as Business | null;
 }
 
+/** Routes an incoming WhatsApp webhook event (keyed by phone_number_id) to its business. */
+export async function getBusinessByWaPhoneId(waPhoneId: string): Promise<Business | null> {
+  const { data, error } = await getSupabaseClient()
+    .from("businesses")
+    .select("*")
+    .eq("wa_phone_id", waPhoneId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data as Business | null;
+}
+
 export type CreateBusinessInput = Partial<
   Omit<Business, "id" | "created_at">
 > & { name: string };

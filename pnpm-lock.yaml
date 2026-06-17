@@ -22,6 +22,9 @@ importers:
       '@rupzone/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
+      '@rupzone/whatsapp-client':
+        specifier: workspace:*
+        version: link:../../packages/whatsapp-client
       fastify:
         specifier: ^4.28.1
         version: 4.29.1
@@ -38,6 +41,9 @@ importers:
 
   apps/dashboard:
     dependencies:
+      '@rupzone/ai-client':
+        specifier: workspace:*
+        version: link:../../packages/ai-client
       '@rupzone/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -111,6 +117,15 @@ importers:
         version: 5.9.3
 
   packages/shared-types: {}
+
+  packages/whatsapp-client:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.16.10
+        version: 20.19.43
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
 
 packages:
 
