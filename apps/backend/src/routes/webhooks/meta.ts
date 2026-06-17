@@ -2,10 +2,25 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import { verifyMetaSignature, type MetaWebhookPayload } from "@rupzone/meta-client";
 import type { WhatsAppWebhookPayload } from "@rupzone/whatsapp-client";
 import { getBusinessByFbPageId, getBusinessByWaPhoneId } from "@rupzone/db";
+import { reportError } from "@rupzone/notify";
 import { env } from "../../config/env";
 import { processComment } from "../../modules/comment-engine";
 import { handleInboundMessage } from "../../modules/agent";
 import { onCustomerReply } from "../../modules/leads";
+
+function reportWebhookError(
+  source: string,
+  err: unknown,
+  business_id: string | null
+): Promise<void> {
+  return reportError({
+    source,
+    message: err instanceof Error ? err.message : String(err),
+    business_id,
+    botToken: env.telegramBotToken,
+    chatId: env.telegramChatId,
+  });
+}
 
 interface VerifyQuery {
   "hub.mode"?: string;
@@ -79,7 +94,11 @@ async function routePagePayload(payload: MetaWebhookPayload): Promise<void> {
   for (const entry of payload.entry) {
     const business = await getBusinessByFbPageId(entry.id);
     if (!business) {
-      console.error(`No business registered for fb_page_id ${entry.id}`);
+      await reportWebhookError(
+        "webhook-routing",
+        `No business registered for fb_page_id ${entry.id}`,
+        null
+      );
       continue;
     }
 
@@ -88,7 +107,7 @@ async function routePagePayload(payload: MetaWebhookPayload): Promise<void> {
       if (change.value.item !== "comment" || change.value.verb !== "add") continue;
 
       await processComment(change.value, business).catch((err) => {
-        console.error("Failed to process comment:", err);
+        reportWebhookError("comment-engine", err, business.id);
       });
     }
 
@@ -101,7 +120,7 @@ async function routePagePayload(payload: MetaWebhookPayload): Promise<void> {
         text,
         fb_psid: event.sender.id,
       }).catch((err) => {
-        console.error("Failed to process Messenger message:", err);
+        reportWebhookError("agent", err, business.id);
       });
     }
   }
@@ -117,8 +136,10 @@ async function routeWhatsAppPayload(payload: WhatsAppWebhookPayload): Promise<vo
 
       const business = await getBusinessByWaPhoneId(change.value.metadata.phone_number_id);
       if (!business) {
-        console.error(
-          `No business registered for wa_phone_id ${change.value.metadata.phone_number_id}`
+        await reportWebhookError(
+          "webhook-routing",
+          `No business registered for wa_phone_id ${change.value.metadata.phone_number_id}`,
+          null
         );
         continue;
       }
@@ -133,13 +154,13 @@ async function routeWhatsAppPayload(payload: WhatsAppWebhookPayload): Promise<vo
           wa_id: message.from,
           name,
         }).catch((err) => {
-          console.error("Failed to process WhatsApp message:", err);
+          reportWebhookError("agent", err, business.id);
           return undefined;
         });
 
         if (customer) {
           await onCustomerReply(business, customer.id).catch((err) => {
-            console.error("Failed to process lead reply tracking:", err);
+            reportWebhookError("leads", err, business.id);
           });
         }
       }

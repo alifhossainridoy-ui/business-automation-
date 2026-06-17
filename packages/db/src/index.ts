@@ -8,3 +8,4 @@ export * from "./queries/productKb";
 export * from "./queries/corrections";
 export * from "./queries/leads";
 export * from "./queries/campaigns";
+export * from "./queries/errorLog";

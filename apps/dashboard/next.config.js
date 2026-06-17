@@ -4,8 +4,10 @@ const nextConfig = {
     "@rupzone/ai-client",
     "@rupzone/db",
     "@rupzone/meta-client",
+    "@rupzone/notify",
     "@rupzone/queue",
     "@rupzone/shared-types",
+    "@rupzone/whatsapp-client",
   ],
 };
 

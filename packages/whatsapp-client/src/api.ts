@@ -64,3 +64,25 @@ export async function sendWhatsAppTemplate(
     throw new Error(`WhatsApp template send failed (${res.status}): ${text}`);
   }
 }
+
+export interface PhoneNumberQuality {
+  /** "GREEN" | "YELLOW" | "RED" | "UNKNOWN", as reported by the Cloud API. */
+  qualityRating: string | null;
+}
+
+/** Health page use only — the messaging quality rating Meta assigns the sending number. */
+export async function getPhoneNumberQuality(
+  phoneNumberId: string,
+  waToken: string
+): Promise<PhoneNumberQuality> {
+  const url = `${GRAPH_BASE}/${phoneNumberId}?fields=quality_rating`;
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${waToken}` } });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`WhatsApp quality rating fetch failed (${res.status}): ${text}`);
+  }
+
+  const json = (await res.json()) as { quality_rating?: string };
+  return { qualityRating: json.quality_rating ?? null };
+}

@@ -14,4 +14,8 @@ export const env = {
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   metaAppSecret: process.env.META_APP_SECRET ?? "",
   metaWebhookVerifyToken: process.env.META_WEBHOOK_VERIFY_TOKEN ?? "",
+  // Operator's own Telegram bot — single alert channel for every business
+  // (Phase 4), not a per-business credential.
+  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? "",
+  telegramChatId: process.env.TELEGRAM_CHAT_ID ?? "",
 };

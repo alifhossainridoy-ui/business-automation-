@@ -5,11 +5,12 @@ export default function HomePage() {
     <main className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="text-2xl font-semibold">RupZone Automation</h1>
       <p className="mt-2 text-neutral-600">
-        Phase 3 — bulk + leads live. Use Setup to register a business and
-        enter its API tokens, Comments for the moderation log, Inbox for
+        Phase 4 — health + hardening live. Use Setup to register a business
+        and enter its API tokens, Comments for the moderation log, Inbox for
         Messenger/WhatsApp conversations, Training to correct Rupa&apos;s
-        knowledge, Leads to import and track customers, and Campaigns to
-        send bulk WhatsApp templates.
+        knowledge, Leads to import and track customers, Campaigns to send
+        bulk WhatsApp templates, and Health to check token/quality status
+        and recent errors.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
@@ -47,6 +48,12 @@ export default function HomePage() {
           className="inline-block rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100"
         >
           Go to Campaigns →
+        </Link>
+        <Link
+          href="/health"
+          className="inline-block rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100"
+        >
+          Go to Health →
         </Link>
       </div>
     </main>

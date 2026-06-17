@@ -90,6 +90,15 @@ export interface ProductKbEntry {
   distance?: number;
 }
 
+/** A backend/health-check failure — written alongside every Telegram alert (rule #5 audit trail). */
+export interface ErrorLogEntry {
+  id: string;
+  business_id: string | null;
+  source: string;
+  message: string;
+  created_at: string;
+}
+
 export interface Correction {
   id: string;
   business_id: string;

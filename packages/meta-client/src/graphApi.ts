@@ -76,3 +76,37 @@ export async function sendMessengerMessage(
     message: { text: message },
   });
 }
+
+export interface TokenDebugResult {
+  isValid: boolean;
+  /** Unix seconds; null if Meta didn't report one, 0 means the token never expires. */
+  expiresAt: number | null;
+}
+
+/**
+ * Introspects any Meta access token (Page or WhatsApp system-user) via the
+ * app's own debug_token endpoint — Health page use only, never on a
+ * send/reply path.
+ */
+export async function debugToken(
+  inputToken: string,
+  appId: string,
+  appSecret: string
+): Promise<TokenDebugResult> {
+  const appAccessToken = `${appId}|${appSecret}`;
+  const url = `${GRAPH_BASE}/debug_token?input_token=${encodeURIComponent(
+    inputToken
+  )}&access_token=${encodeURIComponent(appAccessToken)}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Graph API debug_token failed (${res.status}): ${text}`);
+  }
+
+  const json = (await res.json()) as { data?: { is_valid?: boolean; expires_at?: number } };
+  return {
+    isValid: Boolean(json.data?.is_valid),
+    expiresAt: typeof json.data?.expires_at === "number" ? json.data.expires_at : null,
+  };
+}

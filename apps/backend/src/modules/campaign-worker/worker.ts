@@ -2,6 +2,8 @@ import { Worker, type Job } from "bullmq";
 import { CAMPAIGN_QUEUE_NAME, getQueueConnection, type CampaignJobData } from "@rupzone/queue";
 import { getBusiness, incrementCampaignFailed, incrementCampaignSent } from "@rupzone/db";
 import { sendWhatsAppTemplate } from "@rupzone/whatsapp-client";
+import { reportError } from "@rupzone/notify";
+import { env } from "../../config/env";
 
 /**
  * One shared, rate-limited worker for every business's campaign sends.
@@ -28,6 +30,13 @@ export function startCampaignWorker(): Worker<CampaignJobData> {
         await incrementCampaignSent(campaign_id);
       } catch (err) {
         await incrementCampaignFailed(campaign_id);
+        await reportError({
+          source: "campaign-worker",
+          message: err instanceof Error ? err.message : String(err),
+          business_id,
+          botToken: env.telegramBotToken,
+          chatId: env.telegramChatId,
+        }).catch(() => {});
         throw err;
       }
     },

@@ -19,6 +19,9 @@ importers:
       '@rupzone/meta-client':
         specifier: workspace:*
         version: link:../../packages/meta-client
+      '@rupzone/notify':
+        specifier: workspace:*
+        version: link:../../packages/notify
       '@rupzone/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -56,12 +59,18 @@ importers:
       '@rupzone/meta-client':
         specifier: workspace:*
         version: link:../../packages/meta-client
+      '@rupzone/notify':
+        specifier: workspace:*
+        version: link:../../packages/notify
       '@rupzone/queue':
         specifier: workspace:*
         version: link:../../packages/queue
       '@rupzone/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
+      '@rupzone/whatsapp-client':
+        specifier: workspace:*
+        version: link:../../packages/whatsapp-client
       next:
         specifier: 14.2.15
         version: 14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -117,6 +126,19 @@ importers:
         version: 5.9.3
 
   packages/meta-client:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.16.10
+        version: 20.19.43
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  packages/notify:
+    dependencies:
+      '@rupzone/db':
+        specifier: workspace:*
+        version: link:../db
     devDependencies:
       '@types/node':
         specifier: ^20.16.10

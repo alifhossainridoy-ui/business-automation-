@@ -13,8 +13,10 @@
     "@rupzone/ai-client": "workspace:*",
     "@rupzone/db": "workspace:*",
     "@rupzone/meta-client": "workspace:*",
+    "@rupzone/notify": "workspace:*",
     "@rupzone/queue": "workspace:*",
     "@rupzone/shared-types": "workspace:*",
+    "@rupzone/whatsapp-client": "workspace:*",
     "next": "14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
